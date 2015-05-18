@@ -1,0 +1,138 @@
+<!-- announcements.html -->
+
+<head>
+  <title>Announcements</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Harding High School</h1>
+      <h3>St. Paul, Minnesota</h3>
+      
+      {{#if currentUser}}
+        <button class="manage-subscriptions">Manage Subscriptions</button>
+      {{/if}}
+
+      {{> loginButtons}}
+      <p></p>
+      
+      {{#if currentUser}}	
+      <h3>Current Subscriptions:</h3>
+        
+      	{{#if isAdmin}}
+        <form class="new-group">
+          <input type="text" name="text" placeholder="Type to add a new group" />
+        </form>
+        {{/if}}
+        <p></p>
+      <ul>
+        {{#each groups}}
+          {{> group}}
+        {{/each}}
+      </ul>
+      {{/if}}
+
+
+    </header>
+
+<!--     {{#if isAdmin}}
+    <div class="admin" >
+      <h2>Admin Settings</h2>
+        {{#if currentUser}}
+          <form class="new-group">
+            <input type="text" name="text" placeholder="Type to add a new group" />
+          </form>
+        {{/if}}
+      <h3>Current Groups:</h3>
+      <ul>
+        {{#each groups}}
+          {{> group}}
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}} -->
+
+    {{#if currentUser}}
+    <div class="announcements">
+      <h2>Announcements</h2>
+
+<!--         <label class="hide-completed">
+          <input type="checkbox" checked="{{hideCompleted}}" />
+          Hide Marked Announcements
+        </label> -->
+
+      
+
+        {{#each groups}}
+
+          {{#if subscribed}}
+          <p><h3>{{group}}</h3></p>
+          <div id="{{group}}-heading">
+            <form class="new-announcement" name="{{group}}">
+            <input type="text" name="text" placeholder="Type to add a new announcement" />
+            </form>
+            <ul>
+              {{#each announcements}}
+                {{> announcement}}
+              {{/each}}
+            </ul>
+          </div>
+          {{/if}}
+          
+        {{/each}}
+
+    
+     
+
+    </div>
+    {{/if}}
+  </div>
+</body>
+
+<template name="announcement">
+  <div id="{{group}}-announcement">
+  
+  <!-- <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}"> -->
+  <li>
+  
+
+    {{#if hasRights}}
+    <button class="delete">&times;</button>
+    {{/if}}
+
+<!--     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+ -->
+    <!-- {{#if isOwner}}
+      <button class="toggle-private">
+        {{#if private}}
+          Private
+        {{else}}
+          Public
+        {{/if}}
+      </button>
+    {{/if}} -->
+
+    <span class="text"><strong>{{username}}</strong> - {{text}}</span>
+  </li>
+  
+  </div>
+</template>
+
+<template name="group">
+  <li>
+  	{{#if hasRights}}
+    <button class="delete-group">&times;</button>
+    {{/if}}
+    <button class="toggle-subscribe">
+        {{#if subscribed}}
+          Unsubscribe
+        {{else}}
+          Subscribe
+        {{/if}}
+      </button>
+    <span class="text"><strong>{{group}}</strong> -created by: {{username}}</span>
+
+  </li>
+</template>

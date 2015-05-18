@@ -1,0 +1,7 @@
+Nots:  Announcements App
+
+meteor add accounts-ui accounts-password
+
+meteor remove insecure
+
+meteor remove autopublish
