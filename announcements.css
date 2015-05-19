@@ -44,6 +44,7 @@ header {
   position: relative;
 }
 
+
 #login-buttons {
   display: block;
 }
@@ -89,6 +90,26 @@ ul {
   background: white;
 }
 
+.new-comment input {
+  box-sizing: border-box;
+  padding: 0px 0;
+  border: none;
+  width: 100%;
+  padding-right: 80px;
+  font-size: 1em;
+  margin-left: 15px;
+}
+
+.new-comment input:focus{
+  outline: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+
 .delete {
   float: right;
   font-weight: bold;
@@ -107,6 +128,15 @@ ul {
   position: relative;
 }
 
+.delete-comment {
+  float: right;
+  font-weight: bold;
+  background: none;
+  font-size: 1em;
+  border: none;
+  position: relative;
+}
+
 li {
   position: relative;
   list-style: none;
@@ -117,6 +147,7 @@ li {
 li .text {
   margin-left: 0px;
 }
+
 
 header .hide-completed {
   float: right;

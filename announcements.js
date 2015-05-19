@@ -1,11 +1,13 @@
 Groups = new Mongo.Collection("groups");
 Announcements = new Mongo.Collection("announcements");
+Comments = new Mongo.Collection("comments");
 
 if (Meteor.isClient) {
   // This code only runs on the client
     Meteor.subscribe("announcements");
     Meteor.subscribe("groups");
     Meteor.subscribe("subscriptions");
+    Meteor.subscribe("comments");
 
     Session.set('manageSubscriptions', 'closed');
     Session.set('showAnnouncements', 'open')
@@ -32,7 +34,42 @@ if (Meteor.isClient) {
 
     displayGroup: function () {
       return true;
+    },
+
+    comments: function () {
+      console.log("function called");
+      var displayAnnouncement = this.announcement;
+      console.log(displayAnnouncement);
+      return Comments.find({announcementId: this._id}, {sort: {createdAt: 1}}); 
+    },
+
+  });
+
+  Template.comment.helpers({
+    isOwner: function () {
+      return this.owner === Meteor.userId();
+    },
+
+    hasRights: function () {
+      if (this.owner === Meteor.userId() || Meteor.user().username === "admin"){
+        return true;
+      }
     }
+  });
+
+  Template.announcement.events({
+    "submit .new-comment": function (event) {
+      var text = event.target.text.value;
+      var announcementId = this._id;
+      Meteor.call("addComment", text, announcementId);
+
+      // Clear form
+      event.target.text.value = "";
+
+      // Prevent default form submit
+      return false;
+    }
+
 
   });
 
@@ -65,8 +102,8 @@ if (Meteor.isClient) {
 
     groups: function () {
         return Groups.find({}, {sort: {createdAt: -1}});
-      
     },
+
 
     isAdmin: function () {
       return (Meteor.user().username === "admin");           
@@ -161,6 +198,12 @@ if (Meteor.isClient) {
 
   });
 
+  Template.comment.events({
+    "click .delete-comment": function () {
+      Meteor.call("deleteComment", this._id);
+    }
+  });
+
   Accounts.ui.config({
     passwordSignupFields: "USERNAME_ONLY"
   });
@@ -220,6 +263,29 @@ Meteor.methods({
       throw new Meteor.Error("not-authorized");
     }
     Meteor.users.update({_id:Meteor.user()._id}, { $pull: {subscriptions: group}});    
+  },
+
+  addComment: function (text, announcementId) {
+    // Make sure the user is logged in
+    if (! Meteor.userId()) {
+      throw new Meteor.Error("not-authorized");
+    }
+    Comments.insert({
+      text: text,
+      announcementId: announcementId,
+      createdAt: new Date(),
+      owner: Meteor.userId(),
+      username: Meteor.user().username
+    });
+  },
+
+  deleteComment: function (commentId) {
+    var comment = Comments.findOne(commentId);
+    if (comment.private && comment.owner !== Meteor.userId()) {
+      // If the announcement is private, make sure only the owner can delete it
+      throw new Meteor.Error("not-authorized");
+    }
+    Comments.remove(commentId);
   }
 
 });
@@ -236,6 +302,15 @@ if (Meteor.isServer) {
 
    Meteor.publish("groups", function () {
     return Groups.find({
+      $or: [
+        { private: {$ne: true} },
+        { owner: this.userId }
+      ]
+    });
+  });
+
+    Meteor.publish("comments", function () {
+    return Comments.find({
       $or: [
         { private: {$ne: true} },
         { owner: this.userId }
