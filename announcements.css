@@ -21,8 +21,6 @@ body {
   background: 990134;
 }
 
-
-
 header {
   background: #990134;
   background-image: linear-gradient(to bottom, #990134, #990134 100%);
@@ -117,7 +115,7 @@ li {
 }
 
 li .text {
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 header .hide-completed {
