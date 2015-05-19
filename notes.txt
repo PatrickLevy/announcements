@@ -5,3 +5,5 @@ meteor add accounts-ui accounts-password
 meteor remove insecure
 
 meteor remove autopublish
+
+<!-- <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}"> -->

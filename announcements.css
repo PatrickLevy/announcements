@@ -1,19 +1,16 @@
 /* CSS declarations go here */
 body {
   font-family: sans-serif;
-  background-color: #660000;
-  background-image: linear-gradient(to bottom, #660000, #B20000 100%);
+  background-color: #990134;
+  background-image: linear-gradient(to bottom, gray, white 100%);
   background-attachment: fixed;
-
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-
   padding: 0;
   margin: 0;
-
   font-size: 14px;
 }
 
@@ -21,12 +18,14 @@ body {
   max-width: 600px;
   margin: 0 auto;
   min-height: 100%;
-  background: white;
+  background: 990134;
 }
 
+
+
 header {
-  background: #FF6600;
-  background-image: linear-gradient(to bottom, #FF6600, #FFD1B2 100%);
+  background: #990134;
+  background-image: linear-gradient(to bottom, #990134, #990134 100%);
   padding: 20px 15px 15px 15px;
   position: relative;
 }
@@ -42,7 +41,7 @@ header {
 
 .announcements {
   background: #FF6600;
-  background-image: linear-gradient(to bottom, #FF6600, #FFD1B2 100%);
+  background-image: linear-gradient(to bottom, #FF9900, #FFD1B2 100%);
   padding: 20px 15px 15px 15px;
   position: relative;
 }
@@ -76,7 +75,6 @@ form {
 .new-announcement input {
   box-sizing: border-box;
   padding: 10px 0;
-  
   border: none;
   width: 100%;
   padding-right: 80px;
@@ -122,29 +120,16 @@ li .text {
   margin-left: 10px;
 }
 
-li.checked {
-  color: #888;
-}
-
-li.checked .text {
-  text-decoration: line-through;
-}
-
-li.private {
-  background: #eee;
-  border-color: #ddd;
-}
-
 header .hide-completed {
   float: right;
 }
 
-.toggle-private {
-  margin-left: 5px;
+.toggle-subscribe{
+	width: 100px;
 }
 
 .manage-subscriptions {
-  float: right;
+  float: left;
   font-weight: bold;
   font-size: 1em;
   position: relative;

@@ -7,11 +7,9 @@ if (Meteor.isClient) {
     Meteor.subscribe("groups");
     Meteor.subscribe("subscriptions");
 
-    //Add some hard coded subscriptions
-    //var newSub = "Hmong Club";
-    //Meteor.call("addSubscription", newSub);
-
-
+    Session.set('manageSubscriptions', 'closed');
+    Session.set('showAnnouncements', 'open')
+  
   Template.announcement.helpers({
     isOwner: function () {
       return this.owner === Meteor.userId();
@@ -23,9 +21,7 @@ if (Meteor.isClient) {
       }
     },
 
-    //Not used:
     subscribed: function () {
-      //console.log (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count());
       if (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count() === 1){
         return true;
       }
@@ -34,7 +30,6 @@ if (Meteor.isClient) {
       }
     },
 
-    //remove this?
     displayGroup: function () {
       return true;
     }
@@ -53,7 +48,6 @@ if (Meteor.isClient) {
     },
 
     subscribed: function () {
-      //console.log (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count());
       if (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count() === 1){
         return true;
       }
@@ -61,46 +55,43 @@ if (Meteor.isClient) {
         return false;
       }
     }
-    
   });
 
   Template.body.helpers({
     announcements: function () {
       var displayGroup = this.group;
-      //console.log(displayGroup);
-      //var displayGroup = "robotics";
-      if (Session.get("hideCompleted")) {
-        // If hide completed is checked, filter announcements
-        return Announcements.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
-      } else {
-        // Otherwise, return all of the announcements
-        return Announcements.find({group: displayGroup}, {sort: {createdAt: -1}});
-      }
+      return Announcements.find({group: displayGroup}, {sort: {createdAt: -1}});  
     },
+
     groups: function () {
         return Groups.find({}, {sort: {createdAt: -1}});
       
     },
 
-    hideCompleted: function () {
-      return Session.get("hideCompleted");
-    },
-    incompleteCount: function () {
-      return Announcements.find({checked: {$ne: true}}).count();
-    },
     isAdmin: function () {
-      //console.log (Meteor.user().username);
-      //to avoid errors in the console see: https://github.com/mizzao/meteor-user-status/issues/58
-
-      //var user = Meteor.users.findOne({_id: this.userId});
-      //if (user.username === "admin" && user.status.online){
-      //  return true;
-      //}
       return (Meteor.user().username === "admin");           
     },
+
     subscribed: function () {
-      //console.log (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count());
       if (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count() === 1){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+
+    showManageSubscriptions: function () {
+      if (Session.get('manageSubscriptions') === 'open'){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+
+    showAnnouncements: function () {
+      if (Session.get('showAnnouncements') === 'open'){
         return true;
       }
       else {
@@ -108,15 +99,12 @@ if (Meteor.isClient) {
       }
     }
 
-
   });
 
   Template.body.events({
     "submit .new-announcement": function (event) {
-      // This function is called when the new task form is submitted
       var text = event.target.text.value;
       var group = this.group;
-
       Meteor.call("addAnnouncement", text, group);
 
       // Clear form
@@ -127,9 +115,7 @@ if (Meteor.isClient) {
     },
 
     "submit .new-group": function (event) {
-      // This function is called when the new task form is submitted
       var newGroup = event.target.text.value;
-
       Meteor.call("addGroup", newGroup);
 
       // Clear form
@@ -137,27 +123,25 @@ if (Meteor.isClient) {
 
       // Prevent default form submit
       return false;
-
     },
-    "change .hide-completed input": function (event) {
-      Session.set("hideCompleted", event.target.checked);
+
+    "click .manage-subscriptions": function () {
+      if (Session.get('manageSubscriptions') === 'closed') {
+        Session.set('manageSubscriptions', 'open');
+        Session.set('showAnnouncements', 'closed');
+      }
+      else {
+        Session.set('manageSubscriptions', 'closed');
+        Session.set('showAnnouncements', 'open');
+      }
     }
+
   });
 
   Template.announcement.events({
-    "click .toggle-checked": function () {
-      // Set the checked property to the opposite of its current value
-      Meteor.call("setChecked", this._id, ! this.checked);
-    },
     "click .delete": function () {
       Meteor.call("deleteAnnouncement", this._id);
     }
-
-    //"click .toggle-private": function () {
-    //  Meteor.call("setPrivate", this._id, ! this.private);
-    //}
-
-    
 
   });
 
@@ -167,8 +151,12 @@ if (Meteor.isClient) {
     },
 
     "click .toggle-subscribe": function () {
-      //console.log(this.group);
-      Meteor.call("addSubscription", this.group);
+      if (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count() === 0){
+        Meteor.call("addSubscription", this.group);
+      }
+      else {
+        Meteor.call("removeSubscription", this.group);
+      }
     }
 
   });
@@ -180,7 +168,7 @@ if (Meteor.isClient) {
 
 Meteor.methods({
   addAnnouncement: function (text, group) {
-    // Make sure the user is logged in before inserting a task
+    // Make sure the user is logged in
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
@@ -203,35 +191,11 @@ Meteor.methods({
     Announcements.remove(announcementId);
   },
   
-  setChecked: function (announcementId, setChecked) {
-    var announcement = Announcements.findOne(announcementId);
-    if (announcement.private && announcement.owner !== Meteor.userId()) {
-      // If the announcement is private, make sure only the owner can check it off
-      throw new Meteor.Error("not-authorized");
-    }
-    Announcements.update(announcementId, { $set: { checked: setChecked} });
-  },
-
-  setPrivate: function (announcementId, setToPrivate) {
-  var announcement = Announcements.findOne(announcementId);
-
-    // Make sure only the announcement owner can make an announcement private
-    if (announcement.owner !== Meteor.userId()) {
-      throw new Meteor.Error("not-authorized");
-    }
-
-    Announcements.update(announcementId, { $set: { private: setToPrivate } });
-    },
-
-
-
-
   addGroup: function (newGroup) {
     // Make sure the user is logged in before inserting a task
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-
     Groups.insert({
       group: newGroup,
       createdAt: new Date(),
@@ -241,31 +205,24 @@ Meteor.methods({
   },
 
   deleteGroup: function (groupId) {
-    //var group = Groups.findOne(groupId);
-    //if (group.private && group.owner !== Meteor.userId()) {
-      // If the group is private, make sure only the owner can delete it
-    //  throw new Meteor.Error("not-authorized");
-    //}
-    Groups.remove(groupId);
+       Groups.remove(groupId);
   },
 
   addSubscription: function (group) {
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-    //console.log("Trying to add new subscription");
-    
-    //this might be right?
-    Meteor.users.update({_id:Meteor.user()._id}, { $addToSet: {subscriptions: group}});
-    
+    Meteor.users.update({_id:Meteor.user()._id}, { $addToSet: {subscriptions: group}}); 
+  },
 
-
-    //console.log(Meteor.user().subscriptions);
+  removeSubscription: function (group) {
+    if (! Meteor.userId()) {
+      throw new Meteor.Error("not-authorized");
+    }
+    Meteor.users.update({_id:Meteor.user()._id}, { $pull: {subscriptions: group}});    
   }
 
-
 });
-
 
 if (Meteor.isServer) {
    Meteor.publish("announcements", function () {
@@ -296,8 +253,6 @@ if (Meteor.isServer) {
   Accounts.onCreateUser(function(options, user){
     user.subscriptions = [];
     return user;
-});
-
-
+  });
 
 }
