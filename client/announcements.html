@@ -9,9 +9,15 @@
 	
     <header>
     <img src="hardingBanner.jpg" width="100%"/>
-      {{> loginButtons}}
-      <p></p>
-      {{#if currentUser}}	
+      
+      
+      
+    </header>
+    <div class="settings-button">
+    <h1>Announcements</h1>
+    {{> loginButtons}}
+    <p></p>
+    {{#if currentUser}} 
         <button class="manage-subscriptions">
         {{#if showManageSubscriptions}}
           Show Announcements
@@ -21,12 +27,13 @@
         </button>
         <br>
         {{#if showManageSubscriptions}}
-      	  {{#if isAdmin}}
+          {{#if isAdmin}}
             <form class="new-group">
               <input type="text" name="text" placeholder="Type to add a new group" />
             </form>
-          {{/if}}
           <p></p>
+          {{/if}}
+          
           <ul>
             {{#each groups}}
               {{> group}}
@@ -34,24 +41,35 @@
           </ul>
           {{/if}}
         {{/if}}
-    </header>
+    </div>
+
     {{#if showAnnouncements}}
       {{#if currentUser}}
         <div class="announcements">
-        <h2>Announcements</h2>
+        <h4>My subscriptions:</h4>
         {{#each groups}}
           {{#if subscribed}}
-            <p><h3>{{group}}</h3></p>
-            <div id="{{group}}-heading">
-              <form class="new-announcement" name="{{group}}">
-                <input type="text" name="text" placeholder="Type to add a new announcement" />
-              </form>
-              <ul>
-              {{#each announcements}}
-                {{> announcement}}
-              {{/each}}
-              </ul>
-            </div>
+          <div class="group-buttons">
+            <button class="group-select">{{group}}</button>
+          </div>
+          {{/if}}
+        {{/each}}
+        {{#each groups}}
+          {{#if subscribed}}
+            {{#if groupSelect}}
+              <div id="{{group}}-heading">
+                <br>
+                <h2>{{group}} Announcements</h2>
+                  <form class="new-announcement" name="{{group}}">
+                    <input type="text" name="text" placeholder="Type to add a new announcement" />
+                  </form>
+                  <ul>
+                  {{#each announcements}}
+                    {{> announcement}}
+                  {{/each}}
+                  </ul>
+              </div>
+            {{/if}}
           {{/if}}
         {{/each}}
         </div>

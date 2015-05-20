@@ -1,5 +1,4 @@
 
-
 if (Meteor.isClient) {
   // This code only runs on the client
     Meteor.subscribe("announcements");
@@ -8,7 +7,8 @@ if (Meteor.isClient) {
     Meteor.subscribe("comments");
 
     Session.set('manageSubscriptions', 'closed');
-    Session.set('showAnnouncements', 'open')
+    Session.set('showAnnouncements', 'open');
+    Session.set('selectedGroup', 'none');
   
   Template.announcement.helpers({
     isOwner: function () {
@@ -35,9 +35,6 @@ if (Meteor.isClient) {
     },
 
     comments: function () {
-      console.log("function called");
-      var displayAnnouncement = this.announcement;
-      console.log(displayAnnouncement);
       return Comments.find({announcementId: this._id}, {sort: {createdAt: 1}}); 
     },
 
@@ -67,7 +64,6 @@ if (Meteor.isClient) {
       // Prevent default form submit
       return false;
     }
-
 
   });
 
@@ -102,7 +98,6 @@ if (Meteor.isClient) {
         return Groups.find({}, {sort: {createdAt: -1}});
     },
 
-
     isAdmin: function () {
       return (Meteor.user().username === "admin");           
     },
@@ -127,6 +122,15 @@ if (Meteor.isClient) {
 
     showAnnouncements: function () {
       if (Session.get('showAnnouncements') === 'open'){
+        return true;
+      }
+      else {
+        return false;
+      }
+    },
+
+    groupSelect: function () {
+      if (Session.get('selectedGroup') === this.group){
         return true;
       }
       else {
@@ -169,6 +173,10 @@ if (Meteor.isClient) {
         Session.set('manageSubscriptions', 'closed');
         Session.set('showAnnouncements', 'open');
       }
+    },
+
+    "click .group-select": function () {
+      Session.set('selectedGroup', this.group);
     }
 
   });

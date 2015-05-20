@@ -44,6 +44,12 @@ header {
   position: relative;
 }
 
+.settings-button {
+  background: #FF6600;
+  background-image: linear-gradient(to bottom, #FF9900, #FF9900 100%);
+  padding: 20px 15px 15px 15px;
+  position: relative;
+}
 
 #login-buttons {
   display: block;
@@ -110,6 +116,10 @@ ul {
   background: white;
 }
 
+.group-buttons {
+  margin: 3px;
+}
+
 .delete {
   float: right;
   font-weight: bold;
@@ -149,6 +159,8 @@ li .text {
 }
 
 
+
+
 header .hide-completed {
   float: right;
 }
@@ -162,6 +174,20 @@ header .hide-completed {
   font-weight: bold;
   font-size: 1em;
   position: relative;
+  text-align: left;
+  width: 200px;
+  border-radius: 4px;
+
+}
+
+.group-select {
+  font-weight: bold;
+  font-size: 1em;
+  position: relative;
+  text-align: left;
+  width: 200px;
+  border-radius: 4px;
+
  
 
 }
