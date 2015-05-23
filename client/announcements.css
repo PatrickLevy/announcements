@@ -181,15 +181,22 @@ header .hide-completed {
 }
 
 .group-select {
+  
   font-weight: bold;
   font-size: 1em;
   position: relative;
   text-align: left;
   width: 200px;
   border-radius: 4px;
+}
 
- 
-
+.live-feed {
+  font-weight: bold;
+  font-size: 1em;
+  position: relative;
+  text-align: left;
+  width: 200px;
+  border-radius: 4px;
 }
 
 @media (max-width: 600px) {

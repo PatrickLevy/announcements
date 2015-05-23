@@ -33,7 +33,7 @@
             </form>
           <p></p>
           {{/if}}
-          
+          <br>
           <ul>
             {{#each groups}}
               {{> group}}
@@ -46,7 +46,11 @@
     {{#if showAnnouncements}}
       {{#if currentUser}}
         <div class="announcements">
-        <h4>My subscriptions:</h4>
+        
+        <div class="group-buttons">
+            <button class="live-feed">Live Feed</button>
+        </div>
+
         {{#each groups}}
           {{#if subscribed}}
           <div class="group-buttons">
@@ -54,6 +58,11 @@
           </div>
           {{/if}}
         {{/each}}
+        
+        {{#if liveFeed}}
+          {{> feed}}
+        {{/if}}
+
         {{#each groups}}
           {{#if subscribed}}
             {{#if groupSelect}}
@@ -64,7 +73,7 @@
                     <input type="text" name="text" placeholder="Type to add a new announcement" />
                   </form>
                   <ul>
-                  {{#each announcements}}
+                  {{#each announcementsByGroup}}
                     {{> announcement}}
                   {{/each}}
                   </ul>
@@ -84,7 +93,7 @@
       {{#if hasRights}}
         <button class="delete">&times;</button>
       {{/if}}
-      <span class="text"><strong>{{username}} - {{text}}</strong></span>
+      <span class="text"><strong>{{text}} - {{username}} - {{createdAt}}</strong></span>
         {{#each comments}}
           {{> comment}}
         {{/each}}
@@ -117,7 +126,23 @@
       {{#if hasRights}}
         <button class="delete-comment">&times;</button>
       {{/if}}
-      <span class="text">{{username}} - {{text}}</span>
+      <span class="text">{{text}} - {{username}}</span>
     </li>
   </div>
+</template>
+
+<template name="feed">
+  <div id="{{group}}-heading">
+  <br>
+    <h2>Live Feed</h2>
+      <ul>
+        {{#each announcementsAll}}
+          {{#if subscribed}}
+          <h4><strong>{{group}}</strong></h4>{{> announcement}}
+          {{/if}}
+        {{/each}}
+      </ul>
+  </div>
+        
+  
 </template>
