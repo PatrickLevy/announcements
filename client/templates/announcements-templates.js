@@ -14,7 +14,8 @@
     "submit .new-comment": function (event) {
       var text = event.target.text.value;
       var announcementId = this._id;
-      Meteor.call("addComment", text, announcementId);
+      var announcementGroup = this.group;
+      Meteor.call("addComment", text, announcementId, announcementGroup);
 
       // Clear form
       event.target.text.value = "";

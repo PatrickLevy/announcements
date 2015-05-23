@@ -54,7 +54,7 @@ Meteor.methods({
     Meteor.users.update({_id:Meteor.user()._id}, { $pull: {subscriptions: group}});    
   },
 
-  addComment: function (text, announcementId) {
+  addComment: function (text, announcementId, announcementGroup) {
     // Make sure the user is logged in
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
@@ -62,6 +62,7 @@ Meteor.methods({
     Comments.insert({
       text: text,
       announcementId: announcementId,
+      group: announcementGroup,
       createdAt: new Date(),
       owner: Meteor.userId(),
       username: Meteor.user().username

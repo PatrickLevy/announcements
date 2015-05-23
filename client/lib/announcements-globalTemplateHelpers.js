@@ -32,12 +32,9 @@ Template.registerHelper('announcementsByGroup', function() {
 });
 
 Template.registerHelper('announcementsAll', function() {
-	//var currentUser = Meteor.users.find({_id: Meteor.user()._id});
-	//var displayGroups = this.user.subscriptions;
-	
-	//var displayGroups = Meteor.user()._id.subscriptions; //doesn't work
-	//var displayGroups = Meteor.users.profile.subscriptions;
-	//console.log(displayGroups);
-	//var displayGroups = ['Robotics Team', 'Earth Club'];
     return Announcements.find({}, {sort: {createdAt: -1}});
+});
+
+Template.registerHelper('commentsAll', function() {
+	return Comments.find({}, {sort: {createdAt: -1}});
 });
