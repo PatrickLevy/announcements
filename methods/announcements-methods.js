@@ -9,6 +9,7 @@ Meteor.methods({
       text: text,
       group: group,
       createdAt: new Date(),
+      lastModified: new Date(),
       owner: Meteor.userId(),
       username: Meteor.user().username
     });
@@ -67,6 +68,9 @@ Meteor.methods({
       owner: Meteor.userId(),
       username: Meteor.user().username
     });
+    //update announcement's lastModified field to when the comment was made
+    Announcements.update({_id: announcementId}, {$set: {lastModified: new Date()}});
+
   },
 
   deleteComment: function (commentId) {

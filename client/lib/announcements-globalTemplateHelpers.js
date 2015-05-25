@@ -28,11 +28,11 @@ Template.registerHelper('comments', function() {
 
 Template.registerHelper('announcementsByGroup', function() {
 	var displayGroup = this.group;
-    return Announcements.find({group: displayGroup}, {sort: {createdAt: -1}});
+    return Announcements.find({group: displayGroup}, {sort: {lastModified: -1}});
 });
 
 Template.registerHelper('announcementsAll', function() {
-    return Announcements.find({}, {sort: {createdAt: -1}});
+    return Announcements.find({}, {sort: {lastModified: -1}});
 });
 
 Template.registerHelper('commentsAll', function() {
