@@ -28,13 +28,20 @@
 
   Template.group.helpers({
     // put helpers here
+     manageGroupUsers: function () {
+      if (Session.get('manageUsers') === this.group){
+        return true;
+      }
+      else {
+        return false;
+      }
+
+    },
 
   });
 
   Template.body.helpers({
-    isAdmin: function () {
-      return (Meteor.user().username === "admin");           
-    },
+    
 
     showManageSubscriptions: function () {
       if (Session.get('manageSubscriptions') === 'open'){
@@ -62,6 +69,8 @@
         return false;
       }
     },
+
+   
 
     liveFeed: function () {
       if (Session.get('selectedGroup') === 'liveFeed'){
@@ -106,11 +115,22 @@
       else {
         Session.set('manageSubscriptions', 'closed');
         Session.set('showAnnouncements', 'open');
+        Session.set('manageUsers', 'closed');
       }
     },
 
     "click .group-select": function () {
       Session.set('selectedGroup', this.group);
+    },
+
+    "click .manage-users": function () {
+      console.log(Session.get('manageUsers'));
+      if (Session.get('manageUsers') === 'closed') {
+        Session.set('manageUsers', this.group);
+      }
+      else {
+        Session.set('manageUsers', 'closed');
+      }
     },
 
     "click .live-feed": function () {
@@ -137,6 +157,15 @@
       }
       else {
         Meteor.call("removeSubscription", this.group);
+      }
+    },
+
+    "click .request-membership": function () {
+      if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 0){
+        Meteor.call("addMembership", this.group);
+      }
+      else {
+        Meteor.call("removeMembership", this.group);
       }
     }
 

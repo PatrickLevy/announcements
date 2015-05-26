@@ -169,6 +169,10 @@ header .hide-completed {
 	width: 100px;
 }
 
+.request-membership{
+  width: 100px;
+}
+
 .manage-subscriptions {
   float: left;
   font-weight: bold;

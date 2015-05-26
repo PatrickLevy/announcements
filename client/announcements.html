@@ -69,9 +69,11 @@
               <div id="{{group}}-heading">
                 <br>
                 <h2>{{group}} Announcements</h2>
+                  {{#if isMember}}
                   <form class="new-announcement" name="{{group}}">
                     <input type="text" name="text" placeholder="Type to add a new announcement" />
                   </form>
+                  {{/if}}
                   <ul>
                   {{#each announcementsByGroup}}
                     {{> announcement}}
@@ -97,9 +99,11 @@
         {{#each comments}}
           {{> comment}}
         {{/each}}
+        {{#if isMember}}
           <form class="new-comment" name="{{announcement}}">
             <input type="text" name="text" placeholder="Type to add a new comment" />
           </form>
+        {{/if}}
     </li>
   </div>
 </template>
@@ -111,12 +115,34 @@
     {{/if}}
       <button class="toggle-subscribe">
         {{#if subscribed}}
-          Unsubscribe
+          <br>Unsubscribe
         {{else}}
-          Subscribe
+          <br>Subscribe
         {{/if}}
       </button>
-      <span class="text"><strong>{{group}}</strong></span>
+       <button class="request-membership">
+        {{#if isMember}}
+          Member<br>Click to delete
+        {{else}}
+          Request<br>Membership
+        {{/if}}
+      </button>
+      {{#if isAdmin}}
+       <button class="manage-users">
+        <br>Manage Users
+      </button>
+      {{/if}}
+      <span class="text"><strong>{{group}}</strong>{{#if isGroupAdmin}}-Admin{{/if}}</span>
+  </li>
+  <li>
+
+  {{#if manageGroupUsers}}
+    {{#each userData}}
+    <li>
+      {{username}}
+    </li> 
+    {{/each}}
+  {{/if}}
   </li>
 </template>
 
