@@ -124,12 +124,11 @@
     },
 
     "click .manage-users": function () {
-      console.log(Session.get('manageUsers'));
-      if (Session.get('manageUsers') === 'closed') {
-        Session.set('manageUsers', this.group);
+      if (Session.get('manageUsers') === this.group) {
+        Session.set('manageUsers', 'closed');
       }
       else {
-        Session.set('manageUsers', 'closed');
+        Session.set('manageUsers', this.group);
       }
     },
 
@@ -162,12 +161,30 @@
 
     "click .request-membership": function () {
       if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 0){
-        Meteor.call("addMembership", this.group);
+        Meteor.call("addMembershipRequest", this.username, this.group);
       }
       else {
-        Meteor.call("removeMembership", this.group);
+        Meteor.call("removeMembership", this.username, this.group);
       }
     }
+
+  });
+
+  Template.showUserList.events({
+    "click .membership": function () {
+      if (Meteor.users.find({username: this.username, memberships: Session.get('manageUsers')}).count() === 0){
+        console.log('add membership');
+        console.log('manageUsers: ' + Session.get('manageUsers'));
+        console.log('this.username: ' + this.username);
+
+        //console.log('this.userId' + this.users.userId);
+        Meteor.call("addMembership", this.username, Session.get('manageUsers'));
+      }
+      else {
+        Meteor.call("removeMembership", this.username, Session.get('manageUsers'));
+      }
+    }
+
 
   });
 

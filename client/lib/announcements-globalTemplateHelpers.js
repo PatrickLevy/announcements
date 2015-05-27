@@ -15,6 +15,36 @@ Template.registerHelper('hasRights', function() {
 
 Template.registerHelper('subscribed', function() {
 	if (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count() === 1){
+        console.log('subscribed');
+        return true;
+      }
+      
+  else {
+        return false;
+      }
+});
+
+Template.registerHelper('manageUserSubscribed', function() {
+  if (Meteor.users.find({username: this.username, subscriptions: Session.get('manageUsers')}).count() === 1)  {
+         console.log("Subscibed to " + Session.get('manageUsers'));
+         return true;
+  }
+  else {
+        return false;
+      }
+});
+
+Template.registerHelper('manageUserMembership', function() {
+  if (Meteor.users.find({username: this.username, memberships: Session.get('manageUsers')}).count() === 1) {
+    return true;
+  }
+  else {
+    return false;
+  }
+});
+
+Template.registerHelper('isMember', function() {
+  if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 1){
         return true;
       }
       else {
@@ -22,8 +52,8 @@ Template.registerHelper('subscribed', function() {
       }
 });
 
-Template.registerHelper('isMember', function() {
-  if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 1){
+Template.registerHelper('membershipRequested', function() {
+  if (Meteor.users.find({username: this.username, membershipRequests: Session.get('manageUsers')}).count() === 1){
         return true;
       }
       else {

@@ -110,8 +110,12 @@
 
 <template name="group">
   <li>
+    <li>
+     <h2>{{group}}</h2>{{#if isGroupAdmin}}-Admin{{/if}}
+
+    </li>
   	{{#if hasRights}}
-      <button class="delete-group">&times;</button>
+      <button class="delete-group">Delete Group</button>
     {{/if}}
       <button class="toggle-subscribe">
         {{#if subscribed}}
@@ -132,19 +136,15 @@
         <br>Manage Users
       </button>
       {{/if}}
-      <span class="text"><strong>{{group}}</strong>{{#if isGroupAdmin}}-Admin{{/if}}</span>
+     
   </li>
-  <li>
-
-  {{#if manageGroupUsers}}
-    {{#each userData}}
-    <li>
-      {{username}}
-    </li> 
-    {{/each}}
+  {{# if manageGroupUsers}}
+    {{ > showUserList}}
   {{/if}}
-  </li>
+
 </template>
+
+
 
 <template name="comment">
   <div id="{{announcement}}-comment"> 
@@ -164,11 +164,46 @@
       <ul>
         {{#each announcementsAll}}
           {{#if subscribed}}
-          <h4><strong>{{group}}</strong></h4>{{> announcement}}
+          <h4><strong>{{group}}</strong>{{#if isMember}} - Member {{/if}}</h4>{{> announcement}}
           {{/if}}
         {{/each}}
       </ul>
   </div>
-        
-  
+</template>
+
+<template name="showUserList">
+  <li>
+      {{#each userData}}
+      
+      {{#if manageUserSubscribed}}
+      
+      {{#if membershipRequested}}
+      <li class="membership-requested">
+        <strong>{{username}}</strong> - 
+           Membership Requested 
+
+
+          {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
+          {{else}}
+          <button class="membership"> Add Membership </button>
+          {{/if}}
+      </li>
+      {{else}}
+      <li>
+        <strong>{{username}}</strong> - 
+          {{#if manageUserMembership}} Member 
+          {{/if}}
+
+          {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
+          {{else}}
+          <button class="membership"> Add Membership </button>
+          {{/if}}
+      </li> 
+      {{/if}}
+          
+      
+      {{/if}}
+      
+      {{/each}}
+    </li>
 </template>

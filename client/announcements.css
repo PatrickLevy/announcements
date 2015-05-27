@@ -32,7 +32,6 @@ header {
   background: #FF6600;
   background-image: linear-gradient(to bottom, #FFD1B2, #FFD1B2 100%);
   padding: 20px 15px 15px 15px;
-
   position: relative;
   border-color: red;
 }
@@ -132,11 +131,20 @@ ul {
 .delete-group {
   float: right;
   font-weight: bold;
-  background: none;
+  background: red;
   font-size: 1em;
-  border: none;
   position: relative;
 }
+
+.membership {
+  float: right;
+  font-weight: bold;
+  font-size: 1em;
+  border: bold;
+  position: relative;
+  width: 150px;
+}
+
 
 .delete-comment {
   float: right;
@@ -171,6 +179,10 @@ header .hide-completed {
 
 .request-membership{
   width: 100px;
+}
+
+.membership-requested{
+  background-color: yellow;
 }
 
 .manage-subscriptions {

@@ -49,6 +49,7 @@ if (Meteor.isServer) {
     user.subscriptions = [];
     user.memberships = [];
     user.groupAdmins = [];
+    user.membershipRequests = [];
     return user;
   });
 
