@@ -138,8 +138,10 @@
       {{/if}}
      
   </li>
+  {{# if isAdmin}}
   {{# if manageGroupUsers}}
     {{ > showUserList}}
+  {{/if}}
   {{/if}}
 
 </template>
@@ -174,36 +176,32 @@
 <template name="showUserList">
   <li>
       {{#each userData}}
-      
-      {{#if manageUserSubscribed}}
-      
-      {{#if membershipRequested}}
-      <li class="membership-requested">
-        <strong>{{username}}</strong> - 
-           Membership Requested 
+          {{#if membershipRequested}}
+          <li class="membership-requested">
+            <strong>{{username}}</strong> - 
+              Membership Requested 
 
 
-          {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
+              {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
+              {{else}}
+                <button class="membership"> Add Membership </button>
+              {{/if}}
+          </li>
           {{else}}
-          <button class="membership"> Add Membership </button>
-          {{/if}}
-      </li>
-      {{else}}
-      <li>
-        <strong>{{username}}</strong> - 
-          {{#if manageUserMembership}} Member 
-          {{/if}}
 
-          {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
-          {{else}}
-          <button class="membership"> Add Membership </button>
+            {{#if manageUserSubscribed}}
+            <li>
+              <strong>{{username}}</strong> - 
+                {{#if manageUserMembership}} Member 
+                {{/if}}
+
+                {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
+                {{else}}
+                  <button class="membership"> Add Membership </button>
+                {{/if}}
+            </li>
+            {{/if}}
           {{/if}}
-      </li> 
-      {{/if}}
-          
-      
-      {{/if}}
-      
       {{/each}}
     </li>
 </template>

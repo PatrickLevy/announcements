@@ -160,11 +160,12 @@
     },
 
     "click .request-membership": function () {
-      if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 0){
-        Meteor.call("addMembershipRequest", this.username, this.group);
+      if (Meteor.users.find({username: Meteor.user().username, memberships: this.group}).count() === 0){
+        console.log(Meteor.user().username);
+        Meteor.call("addMembershipRequest", Meteor.user().username, this.group);
       }
       else {
-        Meteor.call("removeMembership", this.username, this.group);
+        Meteor.call("removeMembership", Meteor.user().username, this.group);
       }
     }
 
@@ -173,9 +174,7 @@
   Template.showUserList.events({
     "click .membership": function () {
       if (Meteor.users.find({username: this.username, memberships: Session.get('manageUsers')}).count() === 0){
-        console.log('add membership');
-        console.log('manageUsers: ' + Session.get('manageUsers'));
-        console.log('this.username: ' + this.username);
+      
 
         //console.log('this.userId' + this.users.userId);
         Meteor.call("addMembership", this.username, Session.get('manageUsers'));
