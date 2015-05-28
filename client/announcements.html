@@ -68,15 +68,34 @@
             {{#if groupSelect}}
               <div id="{{group}}-heading">
                 <br>
-                <h2>{{group}} Announcements</h2>
+                <h2><strong>{{group}} Announcements</strong></h2>
                   {{#if isMember}}
+                  <ul>
                   <form class="new-announcement" name="{{group}}">
-                    <input type="text" name="text" placeholder="Type to add a new announcement" />
+                    
+                    <input class= "new-announcement-text" type="text" name="text" placeholder="Type to add a new announcement" />
+
+                    Public Announcement    <input type="checkbox" name="public" id="publicCheckbox">
+                    <button class="new-announcement-button"> Submit new announcement </button>
+                    <br><br>
+                    <!-- <input type="checkbox" name="public-announcement" value="public"> -->
                   </form>
+                  </ul>
+                  <hr>
+                  
+                  
                   {{/if}}
                   <ul>
                   {{#each announcementsByGroup}}
-                    {{> announcement}}
+                    {{#if privateAnnouncement}}
+                      {{#if isMember}}
+                        {{> announcement}}
+                      {{/if}}
+                    {{/if}}
+                    
+                    {{#if publicAnnouncement}}
+                      {{> announcement}}
+                    {{/if}}
                   {{/each}}
                   </ul>
               </div>
@@ -162,11 +181,24 @@
 <template name="feed">
   <div id="{{group}}-heading">
   <br>
-    <h2>Live Feed</h2>
+    <h2><strong>Live Feed</strong></h2>
       <ul>
         {{#each announcementsAll}}
           {{#if subscribed}}
-          <h4><strong>{{group}}</strong>{{#if isMember}} - Member {{/if}}</h4>{{> announcement}}
+
+            {{#if privateAnnouncement}}
+              {{#if isMember}}
+                <h4><strong>{{group}}</strong>{{#if isMember}} - Member {{/if}}</h4>{{> announcement}}
+              {{/if}}
+                    
+            {{/if}}
+                    
+            {{#if publicAnnouncement}}
+              <h4><strong>{{group}}</strong>{{#if isMember}} - Member {{/if}}</h4>{{> announcement}}
+            {{/if}}
+
+
+          
           {{/if}}
         {{/each}}
       </ul>

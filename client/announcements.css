@@ -74,15 +74,41 @@ form {
   margin-top: 10px;
   margin-bottom: -10px;
   position: relative;
+  margin: red;
 }
 
-.new-announcement input {
+.new-announcement-button{
+  position: relative;
+  float: right;
+  margin-right: 1em;
+}
+
+/*.new-announcement input {
   box-sizing: border-box;
   padding: 10px 0;
   border: none;
-  width: 100%;
-  padding-right: 80px;
+  width: 80%;
+  padding-right: 0px;
   font-size: 1em;
+  display: block;
+
+}*/
+
+.new-announcement-text {
+  box-sizing: border-box;
+  padding: 10px 0;
+  border: none;
+  width: 80%;
+  padding-right: 0px;
+  font-size: 1em;
+  display: block;
+
+}
+
+.new-announcement-checkbox {
+  
+  display: block;
+  position: left;
 }
 
 .new-announcement input:focus{
@@ -109,11 +135,7 @@ ul {
   outline: 0;
 }
 
-ul {
-  margin: 0;
-  padding: 0;
-  background: white;
-}
+
 
 .group-buttons {
   margin: 3px;

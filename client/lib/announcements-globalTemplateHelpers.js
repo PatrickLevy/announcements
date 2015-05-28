@@ -45,6 +45,27 @@ Template.registerHelper('manageUserMembership', function() {
 
 Template.registerHelper('isMember', function() {
   if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 1){
+        console.log("isMember");
+        return true;
+      }
+      else {
+        return false;
+      }
+});
+
+Template.registerHelper('privateAnnouncement', function() {
+  if (Announcements.find({_id: this._id, privateAnnouncement: true}).count() === 1){
+        console.log("private");
+        return true;
+      }
+      else {
+        return false;
+      }
+});
+
+Template.registerHelper('publicAnnouncement', function() {
+  if (Announcements.find({_id: this._id, privateAnnouncement: false}).count() === 1){
+        console.log("public");
         return true;
       }
       else {

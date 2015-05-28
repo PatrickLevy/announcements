@@ -1,5 +1,5 @@
 Meteor.methods({
-  addAnnouncement: function (text, group) {
+  addAnnouncement: function (text, group, privateAnnouncement) {
     // Make sure the user is logged in
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
@@ -11,7 +11,8 @@ Meteor.methods({
       createdAt: new Date(),
       lastModified: new Date(),
       owner: Meteor.userId(),
-      username: Meteor.user().username
+      username: Meteor.user().username,
+      privateAnnouncement: privateAnnouncement
     });
   },
 

@@ -87,7 +87,12 @@
     "submit .new-announcement": function (event) {
       var text = event.target.text.value;
       var group = this.group;
-      Meteor.call("addAnnouncement", text, group);
+      var privateAnnouncement = !(document.getElementById("publicCheckbox").checked);
+      console.log(privateAnnouncement);
+      Meteor.call("addAnnouncement", text, group, privateAnnouncement);
+
+      // Clear checkbox
+      document.getElementById("publicCheckbox").checked = false;
 
       // Clear form
       event.target.text.value = "";
