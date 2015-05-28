@@ -168,9 +168,12 @@
       if (Meteor.users.find({username: Meteor.user().username, memberships: this.group}).count() === 0){
         console.log(Meteor.user().username);
         Meteor.call("addMembershipRequest", Meteor.user().username, this.group);
+        //automatically subscribe them too
+        Meteor.call("addSubscription", this.group);
       }
       else {
         Meteor.call("removeMembership", Meteor.user().username, this.group);
+        Meteor.call("removeSubscription", this.group);
       }
     }
 
