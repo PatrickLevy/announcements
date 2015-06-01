@@ -4,7 +4,17 @@ Template.registerHelper('isOwner', function() {
 });
 
 Template.registerHelper('isAdmin', function() {
-  return (Meteor.user().username === "admin");
+if (Meteor.user().username === "admin") {
+  return true;
+ }
+ else if (Meteor.users.find({_id: Meteor.user()._id, groupAdmins: 'siteAdmin'}).count() === 1) {
+  console.log("siteAdmin");
+  return true;
+ }
+
+ else {
+  return false;
+ }
 });
 
 Template.registerHelper('hasRights', function() {
@@ -15,7 +25,6 @@ Template.registerHelper('hasRights', function() {
 
 Template.registerHelper('subscribed', function() {
 	if (Meteor.users.find({_id: Meteor.user()._id, subscriptions: this.group}).count() === 1){
-        console.log('subscribed');
         return true;
       }
       
@@ -26,7 +35,6 @@ Template.registerHelper('subscribed', function() {
 
 Template.registerHelper('manageUserSubscribed', function() {
   if (Meteor.users.find({username: this.username, subscriptions: Session.get('manageUsers')}).count() === 1)  {
-         console.log("Subscibed to " + Session.get('manageUsers'));
          return true;
   }
   else {
@@ -45,7 +53,6 @@ Template.registerHelper('manageUserMembership', function() {
 
 Template.registerHelper('isMember', function() {
   if (Meteor.users.find({_id: Meteor.user()._id, memberships: this.group}).count() === 1){
-        console.log("isMember");
         return true;
       }
       else {
@@ -55,7 +62,6 @@ Template.registerHelper('isMember', function() {
 
 Template.registerHelper('privateAnnouncement', function() {
   if (Announcements.find({_id: this._id, privateAnnouncement: true}).count() === 1){
-        console.log("private");
         return true;
       }
       else {
@@ -65,7 +71,6 @@ Template.registerHelper('privateAnnouncement', function() {
 
 Template.registerHelper('publicAnnouncement', function() {
   if (Announcements.find({_id: this._id, privateAnnouncement: false}).count() === 1){
-        console.log("public");
         return true;
       }
       else {

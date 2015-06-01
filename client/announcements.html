@@ -1,4 +1,8 @@
-<!-- announcements.html -->
+<!-- *****************************************************************-->
+<!-- Application Title:  Announcements                                -->
+<!-- Author: Patrick Levy                                             -->
+<!-- Contact: mrpatricklevy@gmail.com                                 -->
+<!-- *****************************************************************-->
 <head>
   <title>Announcements</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6,167 +10,119 @@
 
 <body>
   <div class="container">
-	
     <header>
-    <img src="hardingBanner.jpg" width="100%"/>
-      
-      
-      
+      <img src="hardingBanner.jpg" width="100%"/>
     </header>
+
     <div class="settings-button">
-    <h1>Announcements</h1>
-    {{> loginButtons}}
-    <p></p>
-    {{#if currentUser}} 
+      <h1>Announcements</h1>
+      {{> loginButtons}}
+      <p></p>
+
+      <!-- Show toggle button for either showing settings or announcement feed -->
+      {{#if currentUser}} 
         <button class="manage-subscriptions">
-        {{#if showManageSubscriptions}}
-          Show Announcements
-        {{else}}
-          Manage Subscriptions
-        {{/if}}
+          {{#if showManageSubscriptions}}
+            Back to Announcements...
+          {{else}}
+            Subscriptions and Settings
+          {{/if}}
         </button>
         <br>
-        {{#if showManageSubscriptions}}
-          {{#if isAdmin}}
-            <form class="new-group">
-              <input type="text" name="text" placeholder="Type to add a new group" />
-            </form>
-          <p></p>
+          <!-- Show settings menu if selected -->
+          {{#if showManageSubscriptions}}
+            {{> settings}}
           {{/if}}
-          <br>
-          <ul>
-            {{#each groups}}
-              {{> group}}
-            {{/each}}
-          </ul>
-          {{/if}}
-        {{/if}}
-    </div>
+      {{/if}}
 
-    {{#if showAnnouncements}}
+    </div> 
+
+      <!-- Show announcements if selected -->
       {{#if currentUser}}
+        {{#if showAnnouncements}}
+
         <div class="announcements">
-        
-        <div class="group-buttons">
-            <button class="live-feed">Live Feed</button>
-        </div>
-
-        {{#each groups}}
-          {{#if subscribed}}
           <div class="group-buttons">
-            <button class="group-select">{{group}}</button>
+            <button class="live-feed">Live Feed</button>
           </div>
-          {{/if}}
-        {{/each}}
-        
-        {{#if liveFeed}}
-          {{> feed}}
-        {{/if}}
 
-        {{#each groups}}
-          {{#if subscribed}}
-            {{#if groupSelect}}
-              <div id="{{group}}-heading">
+          <!-- Show group buttons for subscribed groups -->
+          {{#each groups}}
+            {{#if subscribed}}
+            <div class="group-buttons">
+              <button class="group-select">{{group}}</button>
+            </div>
+            {{/if}}
+          {{/each}}
+        
+          <!-- Show live feed if selected -->
+          {{#if liveFeed}}
+            {{> feed}}
+          {{/if}}
+
+          <!-- Show announcements for group that was selected -->
+          {{#each groups}}
+            {{#if subscribed}}
+              {{#if groupSelect}}
+
+                <!-- Show Selected Group Heading -->
+                <div id="{{group}}-heading">
                 <br>
                 <h2><strong>{{group}} Announcements</strong></h2>
+                  
+                  <!-- Allow members only to make a new announcement and choose if it is public-->
                   {{#if isMember}}
-                  <ul>
-                  <form class="new-announcement" name="{{group}}">
-                    
-                    <input class= "new-announcement-text" type="text" name="text" placeholder="Type to add a new announcement" />
-
-                    Public Announcement    <input type="checkbox" name="public" id="publicCheckbox">
-                    <button class="new-announcement-button"> Submit new announcement </button>
-                    <br><br>
-                    <!-- <input type="checkbox" name="public-announcement" value="public"> -->
-                  </form>
-                  </ul>
-                  <hr>
-                  
-                  
+                    {{> newAnnouncement}}
                   {{/if}}
-                  <ul>
-                  {{#each announcementsByGroup}}
-                    {{#if privateAnnouncement}}
-                      {{#if isMember}}
-                        {{> announcement}}
-                      {{/if}}
-                    {{/if}}
-                    
-                    {{#if publicAnnouncement}}
-                      {{> announcement}}
-                    {{/if}}
-                  {{/each}}
-                  </ul>
-              </div>
+
+                  <!-- Show announcements to all subscribed members -->
+                    <ul>
+                      {{#each announcementsByGroup}}
+                      
+                        <!-- Display private announcements to members only -->
+                        {{#if privateAnnouncement}}
+                          {{#if isMember}}
+                            {{> announcement}}
+                          {{/if}}
+                        {{/if}}
+                        
+                        <!-- Display public announcements to anyone who is subscribed -->
+                        {{#if publicAnnouncement}}
+                          {{> announcement}}
+                        {{/if}}
+                      {{/each}}
+
+                    </ul>
+                </div>
+              {{/if}}
             {{/if}}
-          {{/if}}
-        {{/each}}
+          {{/each}}
         </div>
       {{/if}}
     {{/if}}
   </div>
 </body>
 
-<template name="announcement">
-  <div id="{{group}}-announcement"> 
-    <li>
-      {{#if hasRights}}
-        <button class="delete">&times;</button>
-      {{/if}}
-      <span class="text"><strong>{{text}} - {{username}} - {{createdAt}}</strong></span>
-        {{#each comments}}
-          {{> comment}}
-        {{/each}}
-        {{#if isMember}}
-          <form class="new-comment" name="{{announcement}}">
-            <input type="text" name="text" placeholder="Type to add a new comment" />
-          </form>
-        {{/if}}
-    </li>
-  </div>
+
+<!-- ************************************************************************************-->
+<!-- newAnnouncement: Template for allowing a member to add a new announcement to a group -->
+<!-- *************************************************************************************-->
+<template name="newAnnouncement">
+  <ul>
+    <form class="new-announcement" name="{{group}}">
+      <input class= "new-announcement-text" type="text" name="text" placeholder="Type to add a new announcement" />
+
+      Public Announcement    <input type="checkbox" name="public" id="publicCheckbox">
+      <button class="new-announcement-button"> Submit new announcement </button>
+      <br><br>
+    </form>
+  </ul>
+  <hr>
 </template>
 
-<template name="group">
-  <li>
-    <li>
-     <h2>{{group}}</h2>{{#if isGroupAdmin}}-Admin{{/if}}
-
-    </li>
-  	{{#if hasRights}}
-      <button class="delete-group">Delete Group</button>
-    {{/if}}
-      <button class="toggle-subscribe">
-        {{#if subscribed}}
-          <br>Unsubscribe
-        {{else}}
-          <br>Subscribe
-        {{/if}}
-      </button>
-       <button class="request-membership">
-        {{#if isMember}}
-          Member<br>Click to delete
-        {{else}}
-          Request<br>Membership
-        {{/if}}
-      </button>
-      {{#if isAdmin}}
-       <button class="manage-users">
-        <br>Manage Users
-      </button>
-      {{/if}}
-     
-  </li>
-  {{# if isAdmin}}
-  {{# if manageGroupUsers}}
-    {{ > showUserList}}
-  {{/if}}
-  {{/if}}
-
-</template>
-
-
-
+<!-- ********************************************************************************-->
+<!-- comment: Template for allowing a member to add a new comment to an announcement -->
+<!-- *********************************************************************************-->
 <template name="comment">
   <div id="{{announcement}}-comment"> 
     <li>
@@ -178,6 +134,39 @@
   </div>
 </template>
 
+<!-- ************************************************************************ -->
+<!-- announcement: Template for displaying announcements                      -->
+<!-- ************************************************************************ -->
+<template name="announcement">
+  <div id="{{group}}-announcement"> 
+    <li>
+      
+      <!-- Allow admin or author to delete the announcement -->
+      {{#if hasRights}}
+        <button class="delete">&times;</button>
+      {{/if}}
+
+      <!-- Display main announcement text -->
+      <span class="text"><strong>{{text}} - {{username}} - {{createdAt}}</strong></span>
+
+        <!-- Display all the comments that have been made on the announcement -->
+        {{#each comments}}
+          {{> comment}}
+        {{/each}}
+
+        <!-- Allow members to add comments to the announcements -->
+        {{#if isMember}}
+          <form class="new-comment" name="{{announcement}}">
+            <input type="text" name="text" placeholder="Type to add a new comment" />
+          </form>
+        {{/if}}
+    </li>
+  </div>
+</template>
+
+<!-- *************************************************************************-->
+<!-- feed: Template for displaying the live feed of most recent announcements -->
+<!-- *************************************************************************-->
 <template name="feed">
   <div id="{{group}}-heading">
   <br>
@@ -186,54 +175,166 @@
         {{#each announcementsAll}}
           {{#if subscribed}}
 
+            <!-- Display private announcements only to members of the group -->
             {{#if privateAnnouncement}}
               {{#if isMember}}
                 <h4><strong>{{group}}</strong>{{#if isMember}} - Member {{/if}}</h4>{{> announcement}}
-              {{/if}}
-                    
+              {{/if}}               
             {{/if}}
                     
+            <!-- Display public announcements to anyone subscribed to the group -->
             {{#if publicAnnouncement}}
               <h4><strong>{{group}}</strong>{{#if isMember}} - Member {{/if}}</h4>{{> announcement}}
-            {{/if}}
+            {{/if}} 
 
-
-          
           {{/if}}
         {{/each}}
       </ul>
   </div>
 </template>
 
+<!-- *******************************************************************************-->
+<!-- settings: Template for allowing a user to view groups, subscribe, and request membership -->
+<!-- *******************************************************************************-->
+<template name="settings">
+  {{#if isAdmin}}
+    <form class="new-group">
+      <input type="text" name="text" placeholder="Type to add a new group" />
+    </form>
+    <p></p>
+  {{/if}}
+  <br>
+
+  {{#if isAdmin}}
+  <ul>
+  <li>
+    <h2>All Users</h2>
+    <button class="showAllUsers">
+      {{#if showAllUsers}}
+        Close Users
+      {{else}}
+        Show All Users
+      {{/if}}
+    </button>
+  </li>
+    {{#if isAdmin}}
+      {{#if showAllUsers}}
+        {{> showAllUsersList}}
+      {{/if}}
+    {{/if}}
+  </ul>
+  {{/if}}
+
+  <ul>
+    {{#each groups}}
+      {{> group}}
+    {{/each}}
+  </ul>
+</template>
+
+<!-- *************************************************************-->
+<!-- group: Template for showing groups that a user can subscribe to     -->
+<!-- *************************************************************-->
+<template name="group">
+  <li>
+    <li>
+     <h2>{{group}}</h2>{{#if isGroupAdmin}}-Admin{{/if}}
+    </li>
+      
+      <!-- Allow admin to delete groups -->
+  	  {{#if hasRights}}
+        <button class="delete-group">Delete Group</button>
+      {{/if}}
+
+        <!-- Allow users to subscribe to groups to view public announcements -->
+        <button class="toggle-subscribe">
+          {{#if subscribed}}
+            <br>Unsubscribe
+          {{else}}
+            <br>Subscribe
+          {{/if}}
+        </button>
+
+        <!-- Allow users to request membership to view private announcements -->
+        <button class="request-membership">
+          {{#if isMember}}
+            Member<br>Click to delete
+          {{else}}
+            Request<br>Membership
+          {{/if}}
+        </button>
+        {{#if isAdmin}}
+          <button class="manage-users">
+            <br>Manage Users
+          </button>
+        {{/if}}
+  </li>
+    {{#if isAdmin}}
+      {{#if manageGroupUsers}}
+        {{ > showUserList}}
+      {{/if}}
+    {{/if}}
+</template>
+
+<!-- *************************************************************-->
+<!-- Template for showing a user list for an admin to manage      -->
+<!-- *************************************************************-->
 <template name="showUserList">
   <li>
-      {{#each userData}}
-          {{#if membershipRequested}}
-          <li class="membership-requested">
-            <strong>{{username}}</strong> - 
-              Membership Requested 
+    {{#each userData}}
 
+      <!-- Indicate which subscribed users have requested membership -->
+      {{#if membershipRequested}}
+        <li class="membership-requested">
+          <strong>{{username}}</strong> - 
+          Membership Requested 
 
-              {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
-              {{else}}
-                <button class="membership"> Add Membership </button>
-              {{/if}}
-          </li>
+          <!-- Toggle button for adding or deleting membership -->
+          {{#if manageUserMembership}} 
+            <button class="membership"> Delete Membership</button>
           {{else}}
-
-            {{#if manageUserSubscribed}}
-            <li>
-              <strong>{{username}}</strong> - 
-                {{#if manageUserMembership}} Member 
-                {{/if}}
-
-                {{#if manageUserMembership}} <button class="membership"> Delete Membership</button>
-                {{else}}
-                  <button class="membership"> Add Membership </button>
-                {{/if}}
-            </li>
-            {{/if}}
+            <button class="membership"> Add Membership </button>
           {{/if}}
-      {{/each}}
-    </li>
+          </li>
+      {{else}}
+        {{#if manageUserSubscribed}}
+          <li>
+            <strong>{{username}}</strong> - 
+              
+              <!-- Indicate which users are members  -->
+              {{#if manageUserMembership}} 
+              Member 
+              {{/if}}
+
+              <!-- Allow admin to add or delete membership to subscribed users-->
+              {{#if manageUserMembership}} 
+              <button class="membership"> 
+                Delete Membership</button>
+              {{else}}
+              <button class="membership"> 
+                Add Membership </button>
+              {{/if}}       
+          </li>
+        {{/if}}
+      {{/if}}
+    {{/each}}
+  </li>
+</template>
+
+<!-- *************************************************************-->
+<!-- allUsers: Template for showing a user list for an admin to manage      -->
+<!-- *************************************************************-->
+<template name="showAllUsersList">
+{{#each userData}}
+  <li>
+    <strong>{{username}}</strong> - 
+
+      <!-- Allow admin to add or remove admin status -->
+      {{#if isAdmin}} 
+        <button class="admin-button"> Remove Admin</button>
+      {{else}}
+        <button class="admin-button"> Make Admin </button>
+      {{/if}}
+  </li>
+{{/each}}
 </template>

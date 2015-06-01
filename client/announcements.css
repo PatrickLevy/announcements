@@ -167,6 +167,17 @@ ul {
   width: 150px;
 }
 
+.admin-button {
+  float: right;
+  font-weight: bold;
+  font-size: 1em;
+  border: bold;
+  position: relative;
+  width: 150px;
+}
+
+
+
 
 .delete-comment {
   float: right;
@@ -189,22 +200,29 @@ li .text {
 }
 
 
-
-
-header .hide-completed {
-  float: right;
-}
-
 .toggle-subscribe{
 	width: 100px;
+  font-size: 0.8em;
 }
 
 .request-membership{
   width: 125px;
+  font-size: 0.8em;
+}
+
+.manage-users{
+  width: 125px;
+  font-size: 0.8em;
+}
+
+.showAllUsers{
+  width: 125px;
+  font-size: 0.8em;
 }
 
 .membership-requested{
   background-color: yellow;
+
 }
 
 .manage-subscriptions {

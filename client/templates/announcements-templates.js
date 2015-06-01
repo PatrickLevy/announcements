@@ -40,6 +40,31 @@
 
   });
 
+  Template.settings.helpers({
+    // put helpers here
+     showAllUsers: function () {
+      if (Session.get('manageUsers') === 'all'){
+        return true;
+      }
+      else {
+        return false;
+      }
+
+    },
+
+  });
+
+  Template.settings.events({
+    "click .showAllUsers": function () {
+      if (Session.get('manageUsers') === 'all') {
+        Session.set('manageUsers', 'closed');
+      }
+      else {
+        Session.set('manageUsers', 'all');
+      }
+    },
+  });
+
   Template.body.helpers({
     
 
@@ -70,8 +95,6 @@
       }
     },
 
-   
-
     liveFeed: function () {
       if (Session.get('selectedGroup') === 'liveFeed'){
         return true;
@@ -88,7 +111,6 @@
       var text = event.target.text.value;
       var group = this.group;
       var privateAnnouncement = !(document.getElementById("publicCheckbox").checked);
-      console.log(privateAnnouncement);
       Meteor.call("addAnnouncement", text, group, privateAnnouncement);
 
       // Clear checkbox
@@ -137,6 +159,8 @@
       }
     },
 
+    
+
     "click .live-feed": function () {
       Session.set('selectedGroup', 'liveFeed');
     }
@@ -166,7 +190,6 @@
 
     "click .request-membership": function () {
       if (Meteor.users.find({username: Meteor.user().username, memberships: this.group}).count() === 0){
-        console.log(Meteor.user().username);
         Meteor.call("addMembershipRequest", Meteor.user().username, this.group);
         //automatically subscribe them too
         Meteor.call("addSubscription", this.group);
@@ -182,9 +205,6 @@
   Template.showUserList.events({
     "click .membership": function () {
       if (Meteor.users.find({username: this.username, memberships: Session.get('manageUsers')}).count() === 0){
-      
-
-        //console.log('this.userId' + this.users.userId);
         Meteor.call("addMembership", this.username, Session.get('manageUsers'));
       }
       else {
@@ -195,6 +215,14 @@
 
   });
 
+Template.showAllUsersList.events({
+    "click .admin-button": function () {
+      Meteor.call("addAdmin", this.username);
+      console.log(this.username);
+    }
+
+
+  });
   Template.comment.events({
     "click .delete-comment": function () {
       Meteor.call("deleteComment", this._id);

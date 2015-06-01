@@ -36,6 +36,12 @@ Meteor.methods({
       owner: Meteor.userId(),
       username: Meteor.user().username
     });
+    
+    //subscribe the admin to the new group
+    Meteor.users.update({username:"admin"}, { $addToSet: {subscriptions: newGroup}});
+
+    //make the admin an automatic member of the group
+    Meteor.users.update({username:"admin"}, { $addToSet: {memberships: newGroup}});
   },
 
   deleteGroup: function (groupId) {
@@ -60,8 +66,6 @@ Meteor.methods({
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-
-    //Meteor.users.update({_id:userID}, { $addToSet: {memberships: group}});
     Meteor.users.update({username:username}, { $addToSet: {memberships: group}});
     Meteor.users.update({username:username}, { $pull: {membershipRequests: group}});  
   },
@@ -77,8 +81,6 @@ Meteor.methods({
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-
-    //Meteor.users.update({_id:userID}, { $addToSet: {memberships: group}});
     Meteor.users.update({username:username}, { $addToSet: {membershipRequests: group}});
   },
 
@@ -94,6 +96,16 @@ Meteor.methods({
       throw new Meteor.Error("not-authorized");
     }
     Meteor.users.update({_id:Meteor.user()._id}, { $pull: {groupAdmins: group}});    
+  },
+
+  addAdmin: function (username) {
+    Meteor.users.update({username: username}, { $addToSet: {groupAdmins: 'siteAdmin'}});
+    console.log(username);
+    console.log("site admin added");
+  },
+
+  removeAdmin: function () {
+    
   },
 
   addComment: function (text, announcementId, announcementGroup) {
