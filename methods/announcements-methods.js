@@ -104,8 +104,10 @@ Meteor.methods({
     console.log("site admin added");
   },
 
-  removeAdmin: function () {
-    
+  removeAdmin: function (username) {
+    Meteor.users.update({username: username}, { $pull: {groupAdmins: 'siteAdmin'}});
+    console.log(username);
+    console.log("site admin removed");
   },
 
   addComment: function (text, announcementId, announcementGroup) {

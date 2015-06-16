@@ -330,10 +330,10 @@
     <strong>{{username}}</strong> - 
 
       <!-- Allow admin to add or remove admin status -->
-      {{#if isAdmin}} 
-        <button class="admin-button"> Remove Admin</button>
+      {{#if hasAdminRights}} 
+        <button class="admin-button"> Revoke Site Admin</button>
       {{else}}
-        <button class="admin-button"> Make Admin </button>
+        <button class="admin-button"> Make Site Admin </button>
       {{/if}}
   </li>
 {{/each}}

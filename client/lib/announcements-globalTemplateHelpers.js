@@ -7,14 +7,23 @@ Template.registerHelper('isAdmin', function() {
 if (Meteor.user().username === "admin") {
   return true;
  }
- else if (Meteor.users.find({_id: Meteor.user()._id, groupAdmins: 'siteAdmin'}).count() === 1) {
-  console.log("siteAdmin");
-  return true;
- }
+ //else if (Meteor.users.find({_id: Meteor.user()._id, groupAdmins: 'siteAdmin'}).count() === 1) {
+ // console.log("siteAdmin");
+ // return true;
+ //}
 
  else {
   return false;
  }
+});
+
+Template.registerHelper('hasAdminRights', function() {
+  if (Meteor.users.find({username: this.username, groupAdmins: 'siteAdmin'}).count() === 1){
+    return true;
+  }
+  else {
+    return false;
+  }
 });
 
 Template.registerHelper('hasRights', function() {

@@ -217,8 +217,14 @@
 
 Template.showAllUsersList.events({
     "click .admin-button": function () {
-      Meteor.call("addAdmin", this.username);
+      if (Meteor.users.find({username: this.username, groupAdmins: 'siteAdmin'}).count() === 0){ 
+        Meteor.call("addAdmin", this.username);
       console.log(this.username);
+      }
+      else {
+        Meteor.call("removeAdmin", this.username);
+        console.log(this.username);
+      }
     }
 
 
