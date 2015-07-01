@@ -46,11 +46,21 @@ if (Meteor.isServer) {
 
   //Check publishing of this data!
   Accounts.onCreateUser(function(options, user){
-    user.subscriptions = [];
+    
+    //automatically subscribe new users to school
+    user.subscriptions = ['School'];
     user.memberships = [];
     user.groupAdmins = [];
     user.membershipRequests = [];
     return user;
   });
+
+  //Automatically create a group called 'School'
+  //Groups.insert({
+  //    group: 'School',
+  //    createdAt: new Date(),
+  //    owner: 'admin',
+  //    username: 'admin'
+  //  });
 
 }

@@ -59,7 +59,9 @@ Meteor.methods({
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-    Meteor.users.update({_id:Meteor.user()._id}, { $pull: {subscriptions: group}});    
+    if (group != 'School'){
+      Meteor.users.update({_id:Meteor.user()._id}, { $pull: {subscriptions: group}});
+      }    
   },
 
   addMembership: function (username, group) {
@@ -84,18 +86,18 @@ Meteor.methods({
     Meteor.users.update({username:username}, { $addToSet: {membershipRequests: group}});
   },
 
-  addGroupAdmin: function (group) {
+  addGroupAdmin: function (username, group) {
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-    Meteor.users.update({_id:Meteor.user()._id}, { $addToSet: {groupAdmins: group}}); 
+    Meteor.users.update({username: username}, { $addToSet: {groupAdmins: group}}); 
   },
 
-  removeGroupAdmin: function (group) {
+  removeGroupAdmin: function (username, group) {
     if (! Meteor.userId()) {
       throw new Meteor.Error("not-authorized");
     }
-    Meteor.users.update({_id:Meteor.user()._id}, { $pull: {groupAdmins: group}});    
+    Meteor.users.update({username: username}, { $pull: {groupAdmins: group}});    
   },
 
   addAdmin: function (username) {
