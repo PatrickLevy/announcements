@@ -5,101 +5,157 @@
 <!-- *****************************************************************-->
 <head>
   <title>Announcements</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 
 <body>
   <div class="container">
-    <header>
-      <img src="hardingBanner.jpg" width="100%"/>
-    </header>
+  <div class="settings-button">
+    <div class="row">
+      <div class="col-xs-12">
+        <header>
+          <img src="hardingBanner.jpg" width="100%"/>
+        </header>
+      </div>
+    </div>
 
-    <div class="settings-button">
-      <h1>Announcements</h1>
-      {{> loginButtons}}
-      <p></p>
+    <div class="row">
 
-      <!-- Show toggle button for either showing settings or announcement feed -->
-      {{#if currentUser}} 
-        <button class="manage-subscriptions">
-          {{#if showManageSubscriptions}}
-            Back to Announcements...
-          {{else}}
-            Subscriptions and Settings
-          {{/if}}
-        </button>
-        <br>
-          <!-- Show settings menu if selected -->
-          {{#if showManageSubscriptions}}
-            {{> settings}}
-          {{/if}}
-      {{/if}}
-
-    </div> 
-
-      <!-- Show announcements if selected -->
-      {{#if currentUser}}
-        {{#if showAnnouncements}}
-
-        <div class="announcements">
-          <div class="group-buttons">
-            <button class="live-feed">Live Feed</button>
+      <div class="col-xs-4">
+        <!-- <div class="settings-button"> -->
+          <!-- <h1>Announcements</h1> -->
+          {{> loginButtons}}
+          <p></p>
+      </div>
+      
+      <!-- <div class="col-md-6" role="navigation">
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="active" id="announcementsTab">Announcements</li>
+          <li role="presentation" id="settingsTab">Subscriptions</li>
+        </ul>
+      </div> -->
+      <!-- <div class="col-md-6">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="btn">Button
+            </button>
           </div>
+          
+        </div>
+      </nav>
+      </div> -->
+      
+      <div class="col-xs-8">
 
-          <!-- Show group buttons for subscribed groups -->
-          {{#each groups}}
-            {{#if subscribed}}
-            <div class="group-buttons">
-              <button class="group-select">{{group}}</button>
-            </div>
+        <!-- Show toggle button for either showing settings or announcement feed -->
+        {{#if currentUser}} 
+          <button class="btn manage-subscriptions" id="manage-subscriptions">
+            {{#if showManageSubscriptions}}
+              Back to Announcements...
+            {{else}}
+              Subscriptions and Settings
             {{/if}}
-          {{/each}}
-        
-          <!-- Show live feed if selected -->
-          {{#if liveFeed}}
-            {{> feed}}
-          {{/if}}
-
-          <!-- Show announcements for group that was selected -->
-          {{#each groups}}
-            {{#if subscribed}}
-              {{#if groupSelect}}
-
-                <!-- Show Selected Group Heading -->
-                <div id="{{group}}-heading">
-                <br>
-                <h2><strong>{{group}} Announcements</strong></h2>
-                  
-                  <!-- Allow members only to make a new announcement and choose if it is public-->
-                  {{#if isMember}}
-                    {{> newAnnouncement}}
-                  {{/if}}
-
-                  <!-- Show announcements to all subscribed members -->
-                    <ul>
-                      {{#each announcementsByGroup}}
-                      
-                        <!-- Display private announcements to members only -->
-                        {{#if privateAnnouncement}}
-                          {{#if isMember}}
-                            {{> announcement}}
-                          {{/if}}
-                        {{/if}}
-                        
-                        <!-- Display public announcements to anyone who is subscribed -->
-                        {{#if publicAnnouncement}}
-                          {{> announcement}}
-                        {{/if}}
-                      {{/each}}
-
-                    </ul>
-                </div>
+          </button>
+          <br>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  <div class="announcements">
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- <div class="col-md-12"> -->
+            <!-- Show settings menu if selected -->
+            {{#if currentUser}}
+              {{#if showManageSubscriptions}}
+                {{> settings}}
               {{/if}}
             {{/if}}
-          {{/each}}
-        </div>
+        <!-- </div> -->
+      </div>
+    </div>
+
+    <!-- </div>  -->
+      
+  
+
+    <div class="row">
+      <div class="col-xs-12">
+
+
+        <!-- Show announcements if selected -->
+        {{#if currentUser}}
+          {{#if showAnnouncements}}
+
+          <!-- <div class="announcements"> -->
+            <!-- <div class="group-buttons">
+              <button class="btn" id="live-feed">Live Feed</button>
+            </div>
+ -->
+            <!-- Show group buttons for subscribed groups -->
+            <select class="form-control" id="group-select">
+            <option value="liveFeed">All Groups Live Feed</option>
+              {{#each groups}}
+                {{#if subscribed}}
+                  <option>{{group}}</option>  
+              <!-- <div class="group-buttons">
+                <button class="group-select">{{group}}</button>
+              </div> -->
+                {{/if}}
+              {{/each}}
+            </select>
+        
+            <!-- Show live feed if selected -->
+            {{#if liveFeed}}
+              {{> feed}}
+            {{/if}}
+
+            <!-- Show announcements for group that was selected -->
+            {{#each groups}}
+              {{#if subscribed}}
+                {{#if groupSelect}}
+
+                  <!-- Show Selected Group Heading -->
+                  <div id="{{group}}-heading">
+                  <br>
+                  <!-- <h2><strong>{{group}} Announcements</strong></h2> -->
+                  
+                    <!-- Allow members only to make a new announcement and choose if it is public-->
+                    {{#if isMember}}
+                      {{> newAnnouncement}}
+                    {{/if}}
+
+                    <!-- Show announcements to all subscribed members -->
+                      <ul>
+                        {{#each announcementsByGroup}}
+                      
+                          <!-- Display private announcements to members only -->
+                          {{#if privateAnnouncement}}
+                            {{#if isMember}}
+                              {{> announcement}}
+                            {{/if}}
+                          {{/if}}
+                        
+                          <!-- Display public announcements to anyone who is subscribed -->
+                          {{#if publicAnnouncement}}
+                            {{> announcement}}
+                          {{/if}}
+                        {{/each}}
+
+                      </ul>
+                  </div>
+                {{/if}}
+              {{/if}}
+            {{/each}}
+        
+        {{/if}}
       {{/if}}
-    {{/if}}
+      </div>
+    </div>
+  </div>
+ <!--  </div> -->
   </div>
 </body>
 
@@ -108,15 +164,30 @@
 <!-- newAnnouncement: Template for allowing a member to add a new announcement to a group -->
 <!-- *************************************************************************************-->
 <template name="newAnnouncement">
-  <ul>
-    <form class="new-announcement" name="{{group}}">
-      <input class= "new-announcement-text" type="text" name="text" placeholder="Type to add a new announcement" />
+  <!-- <ul> -->
+  <div class="row">
+  <form class="new-announcement" name="{{group}}">
+  
+  
+    <div class="col-xs-6">
+      <input class= "form-control new-announcement-text" type="text" name="text" placeholder="New {{group}} announcement" />
+    </div>
+  
+    <div class="col-xs-3">
+    {{#if notSchool}}
+      <label>Public<input type="checkbox" name="public" id="publicCheckbox" class="new-announcement-checkbox"></label>
+    {{/if}}
+    </div>
 
-      Public Announcement    <input type="checkbox" name="public" id="publicCheckbox">
-      <button class="new-announcement-button"> Submit new announcement </button>
-      <br><br>
-    </form>
-  </ul>
+    <div class="col-xs-3">
+      <button class="btn new-announcement-button">Submit</button>
+    </div>
+  </form>
+  </div>
+    
+  
+  
+  <!-- </ul> -->
   <hr>
 </template>
 
@@ -170,7 +241,7 @@
 <template name="feed">
   <div id="{{group}}-heading">
   <br>
-    <h2><strong>Live Feed</strong></h2>
+    <!-- <h2><strong>All Groups Live Feed</strong></h2> -->
       <ul>
         {{#each announcementsAll}}
           {{#if subscribed}}
@@ -198,10 +269,14 @@
 <!-- *******************************************************************************-->
 <template name="settings">
   {{#if isAdmin}}
-    <form class="new-group">
-      <input type="text" name="text" placeholder="Type to add a new group" />
-    </form>
-    <p></p>
+  <div class="row">
+    <div class="col-xs-6">
+      <form class="new-group">
+        <input type="text" name="text" placeholder="Type to add a new group" />
+      </form>
+      <p></p>
+    </div>
+  </div>
   {{/if}}
   <br>
 

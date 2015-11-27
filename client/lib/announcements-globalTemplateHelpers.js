@@ -106,7 +106,7 @@ Template.registerHelper('isGroupAdmin', function() {
 });
 
 Template.registerHelper('groups', function() {
-	return Groups.find({}, {sort: {createdAt: -1}});
+	return Groups.find({}, {sort: {group: 1}});
 });
 
 Template.registerHelper('comments', function() {
@@ -115,11 +115,11 @@ Template.registerHelper('comments', function() {
 
 Template.registerHelper('announcementsByGroup', function() {
 	var displayGroup = this.group;
-    return Announcements.find({group: displayGroup}, {sort: {lastModified: -1}});
+    return Announcements.find({group: displayGroup}, {sort: {lastModified: -1}, limit: 100});
 });
 
 Template.registerHelper('announcementsAll', function() {
-    return Announcements.find({}, {sort: {lastModified: -1}});
+    return Announcements.find({}, {sort: {lastModified: -1}, limit: 100});
 });
 
 Template.registerHelper('commentsAll', function() {

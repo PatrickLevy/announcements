@@ -28,6 +28,11 @@ header {
   position: relative;
 }
 
+select.form-control {
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .admin {
   background: #FF6600;
   background-image: linear-gradient(to bottom, #FFD1B2, #FFD1B2 100%);
@@ -77,22 +82,23 @@ form {
   margin: red;
 }
 
+
 .new-announcement-button{
   position: relative;
   float: right;
   margin-right: 1em;
 }
 
-/*.new-announcement input {
+.new-announcement input {
   box-sizing: border-box;
-  padding: 10px 0;
+  padding: 10px;
   border: none;
-  width: 80%;
+  width: 100%;
   padding-right: 0px;
   font-size: 1em;
   display: block;
 
-}*/
+}
 
 .new-announcement-text {
   box-sizing: border-box;
@@ -105,11 +111,9 @@ form {
 
 }
 
-.new-announcement-checkbox {
-  
-  display: block;
-  position: left;
-}
+
+
+
 
 .new-announcement input:focus{
   outline: 0;
@@ -176,9 +180,6 @@ ul {
   width: 150px;
 }
 
-
-
-
 .delete-comment {
   float: right;
   font-weight: bold;
@@ -226,7 +227,7 @@ li .text {
 }
 
 .manage-subscriptions {
-  float: left;
+  float: right;
   font-weight: bold;
   font-size: 1em;
   position: relative;
@@ -254,6 +255,7 @@ li .text {
   width: 200px;
   border-radius: 4px;
 }
+
 
 @media (max-width: 600px) {
   li {

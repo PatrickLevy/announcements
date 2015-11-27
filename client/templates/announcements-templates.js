@@ -6,6 +6,18 @@
 
   });
 
+  Template.newAnnouncement.helpers({
+    notSchool: function () {
+      //return true;
+      if (this.group === 'School'){
+        return false;
+      } 
+      else {
+        return true;
+      }
+    },
+  });
+
   Template.comment.helpers({
     //put helpers here
   });
@@ -110,7 +122,11 @@
     "submit .new-announcement": function (event) {
       var text = event.target.text.value;
       var group = this.group;
-      var privateAnnouncement = !(document.getElementById("publicCheckbox").checked);
+      var privateAnnouncement = false;
+      if (group != 'School'){
+        privateAnnouncement = !(document.getElementById("publicCheckbox").checked);
+      }
+      
       Meteor.call("addAnnouncement", text, group, privateAnnouncement);
 
       // Clear checkbox
@@ -134,7 +150,7 @@
       return false;
     },
 
-    "click .manage-subscriptions": function () {
+    "click #manage-subscriptions": function () {
       if (Session.get('manageSubscriptions') === 'closed') {
         Session.set('manageSubscriptions', 'open');
         Session.set('showAnnouncements', 'closed');
@@ -146,8 +162,9 @@
       }
     },
 
-    "click .group-select": function () {
-      Session.set('selectedGroup', this.group);
+    "change #group-select": function (evt) {
+      Session.set('selectedGroup', $(evt.target).val());
+      //Session.set('selectedGroup', this.group);
     },
 
     "click .manage-users": function () {
@@ -161,7 +178,7 @@
 
     
 
-    "click .live-feed": function () {
+    "click #live-feed": function () {
       Session.set('selectedGroup', 'liveFeed');
     }
 
@@ -205,7 +222,12 @@
   Template.showUserList.events({
     "click .membership": function () {
       if (Meteor.users.find({username: this.username, memberships: Session.get('manageUsers')}).count() === 0){
-        Meteor.call("addMembership", this.username, Session.get('manageUsers'));
+        if (Session.get('manageUsers') === 'School'){
+          return;
+        }
+        else {
+          Meteor.call("addMembership", this.username, Session.get('manageUsers'));
+        }
       }
       else {
         Meteor.call("removeMembership", this.username, Session.get('manageUsers'));
